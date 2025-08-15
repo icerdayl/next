@@ -1,5 +1,4 @@
 import Link from "next/link"
-import UsersServer from "../main";
 
 type User = {
   id: number;
@@ -43,7 +42,7 @@ export default function Input(){
                 <h1>Description</h1>
                 <input type="text" placeholder="Enter the Description..." id="description"/>
             </div>
-            <Link href="../">
+            <Link href="/">
                 <button type="submit" className="flex-col cursor-pointer" >
                 SUBMIT</button>
                 </Link>
@@ -51,6 +50,5 @@ export default function Input(){
     )
 }
 Input()
-
 
 
