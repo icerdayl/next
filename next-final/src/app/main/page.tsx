@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-
 import { useGetListing } from "@/hooks/useGetListing";
+import { usePostListing} from "@/hooks/usePostListing";
+import { useDeleteListing } from "@/hooks/useDeleteListing";
 
 type Listing = {
     id: number;
@@ -17,6 +18,26 @@ type Listing = {
 
 const LandingPage = () => {
     const {data: listings, isLoading, isError, error} = useGetListing()
+    const {mutate: postList} = usePostListing()
+    const {mutate: deleteList} = useDeleteListing()
+
+    const deletePost = (id: string) => {
+        deleteList(id)
+    }
+
+    // const addPost = (formData: FormData) => {
+    //     postList({
+    //         title: formData.get('name'),
+    //         tags: formData.get('tags'),
+    //         company: formData.get('company'),
+    //         email: formData.get('email'),
+    //         website: formData.get('website'),
+    //         location: formData.get('location'),
+    //         description: formData.get('description')
+    //     })
+
+    // }
+
 
     if (isLoading){
         return (
@@ -32,37 +53,40 @@ const LandingPage = () => {
                 <h1 className="text-red-600 font-bold text-6xl text-center align-middle animate-pulse">Error: {error.message}</h1>
             </div>
         )
-    }
+    }   
+    
 
     return(
          <>
             <header>
-                <nav className="text-center font-bold cursor-pointer"><Link href="../">Home</Link></nav>
+                <nav className="text-center font-bold cursor-pointer mt-5">
+                    <Link href="../" className="border-2 py-3 px-6 mt-2 rounded-xl hover:bg-white hover:text-black duration-500 ease-in">
+                    Home</Link></nav>
             </header>
-            <form className="flex-col justify-between text-center mt-3">
+            <form className="flex-col justify-between text-center mt-5">
                 <div className="">
-                <input type="text" name="title" required placeholder="Enter the title..."/>
-                <input type="text" name="tags" required placeholder="Enter the tags..."/>
-                <input type="text" name="company" required placeholder="Enter the company..."/>
-                <input type="text" name="email" required placeholder="Enter the email..."/>
+                <input className="mr-2 "type="text" id="title" name="title" required placeholder="Enter the title..."/>
+                <input className="mr-2 "type="text" id="tags" name="tags" required  placeholder="Enter the tags..."/>
+                <input className="mr-2 "type="text" id="company" name="company" required placeholder="Enter the company..."/>
+                <input className="mr-2 "type="text" id="email" name="email" required placeholder="Enter the email..."/>
                 </div>
-                <div>
-                <input type="text" name="website" required placeholder="Enter the website..."/>
-                <input type="text" name="location" required placeholder="Enter the location..."/>
-                <input type="text" name="description" required placeholder="Enter the description..."/>
-                <button type="submit">Enter</button>
+                <div className="mt-4">
+                <input className="mr-2 "type="text" id="website" name="website" required placeholder="Enter the website..."/>
+                <input className="mr-2 "type="text" id="location" name="location" required placeholder="Enter the location..."/>
+                <input className="mr-2 "type="text" id="description" name="description" required  placeholder="Enter the description..."/>
+                <button type="submit" className="hover:font-bold cursor-pointer">Enter</button>
                 </div>
             </form>
             <ul className="space-y-4 p-4">
                 {(listings ?? []).map((listing: Listing) => (
                 <li
                     key={listing.id}
-                    className="flex-col p-4 bg-white shadow-md rounded-lg text-gray-700"
+                    className="flex-col p-4 bg-white shadow-md rounded-lg text-gray-700 hover:text-white hover:bg-gray-700 duration-500 ease-in  "
                 >
                     <div className="font-bold flex justify-between">{listing.title} 
                     <div className="flex gap-5">
-                        <button>Edit</button>
-                        <button className="hover:text-red-500 cursor-pointer">Delete</button>
+                        <button className="hover:text-amber-200 cursor-pointer">Edit</button>
+                        <button className="hover:text-red-400 cursor-pointer" >Delete</button>
                     </div>
                     </div>
                     <div className="text-sm">
