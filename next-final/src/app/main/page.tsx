@@ -5,6 +5,7 @@ import { useGetListing } from "@/hooks/useGetListing";
 import { usePostListing} from "@/hooks/usePostListing";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
+import { FormStatus } from "react-dom";
 
 
 type Listing = {
@@ -24,6 +25,38 @@ const LandingPage = () => {
     const {mutate: deleteList} = useDeleteListing()
     const {mutate: updateList} = useUpdateListing()
 
+    const handleUpdate = (formValue: FormData) => {
+        updateList({
+            titleUp: formValue.get('titleUp'),
+            tagsUp: formValue.get('tagsUp'),
+            companyUp: formValue.get('companyUp'),
+            emailUp: formValue.get('emailUp'),
+            websiteUp: formValue.get('websiteUp'),
+            locationUp: formValue.get('locationUp'),
+            descriptionUp: formValue.get('descriptionUp')
+        })
+    }
+
+    const updatePost = (listing:Listing) => {
+        return(
+            <div className="fixed w-50 bg white">
+                <div>
+                    <h1 className="font-extrabold">Hello</h1>
+                </div>
+                <form action={handleUpdate}>
+                    <input type="text" value={listing.title} name="titleUp"/>
+                    <input type="text" value={listing.tags} name="tagsUp"/>
+                    <input type="text" value={listing.company} name="companyUp"/>
+                    <input type="text" value={listing.email} name="emailUp"/>
+                    <input type="text" value={listing.website} name="websiteUp"/>
+                    <input type="text" value={listing.location} name="locationUp"/>
+                    <input type="text" value={listing.description} name="descriptionUp"/>
+                    <button type="submit">SUMBIT</button>
+                </form>
+            </div>
+        )
+        console.log("CLICKED")
+    }
 
     const deletePost = (id: string) => {
         deleteList(id)
@@ -81,15 +114,17 @@ const LandingPage = () => {
                 <button type="submit" className="hover:font-bold cursor-pointer">Enter</button>
                 </div>
             </form>
+            
             <ul className="space-y-4 p-4">
                 {(listings ?? []).map((listing: Listing) => (
+                    
                 <li
                     key={listing.id}
                     className="flex-col p-4 bg-white shadow-md rounded-lg text-gray-700 hover:text-white hover:bg-gray-700 duration-500 ease-in  "
                 >
                     <div className="font-bold flex justify-between">{listing.title} 
                     <div className="flex gap-5">
-                        <button className="hover:text-amber-200 cursor-pointer">Edit</button>
+                        <button className="hover:text-amber-200 cursor-pointer" onClick={() => updatePost(listing) }>Edit</button>
                         <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
                     </div>
                     </div>
@@ -102,6 +137,7 @@ const LandingPage = () => {
                     <div>Job Description: {listing.description}</div>
                     </div>
                 </li>
+                
                 ))}
             </ul>
          </>
