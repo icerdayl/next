@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+
 import { useGetListing } from "@/hooks/useGetListing";
 import { usePostListing} from "@/hooks/usePostListing";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
-import { FormStatus } from "react-dom";
 
 
 type Listing = {
@@ -24,7 +24,7 @@ const LandingPage = () => {
     const {mutate: postList} = usePostListing()
     const {mutate: deleteList} = useDeleteListing()
     const {mutate: updateList} = useUpdateListing()
-
+gi
     const handleUpdate = (formValue: FormData) => {
         updateList({
             titleUp: formValue.get('titleUp'),
@@ -100,18 +100,18 @@ const LandingPage = () => {
                     <Link href="../" className="border-2 py-3 px-6 mt-2 rounded-xl hover:bg-white hover:border-none hover:text-black duration-500 ease-in">
                     Home</Link></nav>
             </header>
-            <form action={addPost}className="flex-col justify-between text-center mt-5">
+            <form action={addPost}className="flex-col justify-between text-center mt-5 flex-1">
                 <div className="">
-                <input className="mr-2 "type="text" id="title" name="title" required placeholder="Enter the title..."/>
-                <input className="mr-2 "type="text" id="tags" name="tags" required  placeholder="Enter the tags..."/>
-                <input className="mr-2 "type="text" id="company" name="company" required placeholder="Enter the company..."/>
-                <input className="mr-2 "type="text" id="email" name="email" required placeholder="Enter the email..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="title" name="title" required placeholder="Enter the title..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="tags" name="tags" required  placeholder="Enter the tags..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="company" name="company" required placeholder="Enter the company..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="email" name="email" required placeholder="Enter the email..."/>
                 </div>
                 <div className="mt-4">
-                <input className="mr-2 "type="text" id="website" name="website" required placeholder="Enter the website..."/>
-                <input className="mr-2 "type="text" id="location" name="location" required placeholder="Enter the location..."/>
-                <input className="mr-2 "type="text" id="description" name="description" required  placeholder="Enter the description..."/>
-                <button type="submit" className="hover:font-bold cursor-pointer">Enter</button>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="website" name="website" required placeholder="Enter the website..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="location" name="location" required placeholder="Enter the location..."/>
+                <input className="mr-2 bg-white placeholder:text-gray-400 pr-5 pl-1 py-1.5 rounded-lg text-black outline-none"type="text" id="description" name="description" required  placeholder="Enter the description..."/>
+                <button type="submit" className="mr-41 bg-white text-black font-bold px-3 py-1.5 rounded-lg hover:bg-gray-800 hover:text-white transition duration-300 ease-in cursor-pointer">Enter</button>
                 </div>
             </form>
             
@@ -124,7 +124,7 @@ const LandingPage = () => {
                 >
                     <div className="font-bold flex justify-between">{listing.title} 
                     <div className="flex gap-5">
-                        <button className="hover:text-amber-200 cursor-pointer" onClick={() => updatePost(listing) }>Edit</button>
+                        <Link href="/edit"><button className="hover:text-amber-200 cursor-pointer">Edit</button></Link>
                         <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
                     </div>
                     </div>
