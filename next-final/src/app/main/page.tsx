@@ -6,6 +6,7 @@ import { useGetListing } from "@/hooks/useGetListing";
 import { usePostListing} from "@/hooks/usePostListing";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
+import { useState } from "react";
 
 
 type Listing = {
@@ -24,35 +25,49 @@ const LandingPage = () => {
     const {mutate: postList} = usePostListing()
     const {mutate: deleteList} = useDeleteListing()
     const {mutate: updateList} = useUpdateListing()
-gi
+    const [editList, seteditList] = useState<Listing | null>(null)
+
     const handleUpdate = (formValue: FormData) => {
+        if (!editList) return;
         updateList({
-            titleUp: formValue.get('titleUp'),
-            tagsUp: formValue.get('tagsUp'),
-            companyUp: formValue.get('companyUp'),
-            emailUp: formValue.get('emailUp'),
-            websiteUp: formValue.get('websiteUp'),
-            locationUp: formValue.get('locationUp'),
-            descriptionUp: formValue.get('descriptionUp')
-        })
+            id: editList.id,
+            title: formValue.get('titleUp'),
+            tags: formValue.get('tagsUp'),
+            company: formValue.get('companyUp'),
+            email: formValue.get('emailUp'),
+            website: formValue.get('websiteUp'),
+            location: formValue.get('locationUp'),
+            description: formValue.get('descriptionUp')
+        });
+        seteditList(null);
+    }
+
+    const editClick = (listing: Listing) => {
+        seteditList(listing)
     }
 
     const updatePost = (listing:Listing) => {
         return(
-            <div className="fixed w-50 bg white">
-                <div>
-                    <h1 className="font-extrabold">Hello</h1>
+            <div className="fixed w-full h-full bg-white">
+                <div className="blur-2xl">
+                    <div className="font-extrabold">
+                        <h1 className="font-extrabold">Hello</h1>
+                        <form action={handleUpdate}>
+                            <input type="text" defaultValue={listing.title} name="titleUp"/>
+                            <input type="text" defaultValue={listing.tags} name="tagsUp"/>
+                            <input type="text" defaultValue={listing.company} name="companyUp"/>
+                            <input type="text" defaultValue={listing.email} name="emailUp"/>
+                            <input type="text" defaultValue={listing.website} name="websiteUp"/>
+                            <input type="text" defaultValue={listing.location} name="locationUp"/>
+                            <input type="text" defaultValue={listing.description} name="descriptionUp"/>
+                            <div>
+                                <button type="submit">SUMBIT</button>
+                                <button type="button" onClick={() => seteditList(null)}> CANCEL</button>
+                            </div>
+                        </form>
+                    </div>
+                    
                 </div>
-                <form action={handleUpdate}>
-                    <input type="text" value={listing.title} name="titleUp"/>
-                    <input type="text" value={listing.tags} name="tagsUp"/>
-                    <input type="text" value={listing.company} name="companyUp"/>
-                    <input type="text" value={listing.email} name="emailUp"/>
-                    <input type="text" value={listing.website} name="websiteUp"/>
-                    <input type="text" value={listing.location} name="locationUp"/>
-                    <input type="text" value={listing.description} name="descriptionUp"/>
-                    <button type="submit">SUMBIT</button>
-                </form>
             </div>
         )
         console.log("CLICKED")
@@ -124,7 +139,7 @@ gi
                 >
                     <div className="font-bold flex justify-between">{listing.title} 
                     <div className="flex gap-5">
-                        <Link href="/edit"><button className="hover:text-amber-200 cursor-pointer">Edit</button></Link>
+                        <button className="hover:text-amber-200 cursor-pointer" onClick={() => editClick(listing)}>Edit</button>
                         <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
                     </div>
                     </div>
@@ -140,6 +155,7 @@ gi
                 
                 ))}
             </ul>
+            {editList && updatePost(editList)}
          </>
     )
 }
