@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const usePostListing = () => {
     return useMutation({mutationFn: async (newListing: any) => {
-        const response = await axios.post('http://127.0.0.1:8000/api/listings/all', newListing);
+        const response = await axios.post('https://689d89abce755fe69788ea77.mockapi.io/users', newListing);
         return response.data
     },
     onSuccess: () => {

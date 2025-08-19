@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useGetListing } from "@/hooks/useGetListing";
 import { usePostListing} from "@/hooks/usePostListing";
 import { useDeleteListing } from "@/hooks/useDeleteListing";
+import { useUpdateListing } from "@/hooks/useUpdateListing";
+
 
 type Listing = {
     id: number;
@@ -20,23 +22,25 @@ const LandingPage = () => {
     const {data: listings, isLoading, isError, error} = useGetListing()
     const {mutate: postList} = usePostListing()
     const {mutate: deleteList} = useDeleteListing()
+    const {mutate: updateList} = useUpdateListing()
+
 
     const deletePost = (id: string) => {
         deleteList(id)
     }
 
-    // const addPost = (formData: FormData) => {
-    //     postList({
-    //         title: formData.get('name'),
-    //         tags: formData.get('tags'),
-    //         company: formData.get('company'),
-    //         email: formData.get('email'),
-    //         website: formData.get('website'),
-    //         location: formData.get('location'),
-    //         description: formData.get('description')
-    //     })
+    const addPost = (formData: FormData) => {
+        postList({
+            title: formData.get('title'),
+            tags: formData.get('tags'),
+            company: formData.get('company'),
+            email: formData.get('email'),
+            website: formData.get('website'),
+            location: formData.get('location'),
+            description: formData.get('description')
+        })
 
-    // }
+    }
 
 
     if (isLoading){
@@ -60,10 +64,10 @@ const LandingPage = () => {
          <>
             <header>
                 <nav className="text-center font-bold cursor-pointer mt-5">
-                    <Link href="../" className="border-2 py-3 px-6 mt-2 rounded-xl hover:bg-white hover:text-black duration-500 ease-in">
+                    <Link href="../" className="border-2 py-3 px-6 mt-2 rounded-xl hover:bg-white hover:border-none hover:text-black duration-500 ease-in">
                     Home</Link></nav>
             </header>
-            <form className="flex-col justify-between text-center mt-5">
+            <form action={addPost}className="flex-col justify-between text-center mt-5">
                 <div className="">
                 <input className="mr-2 "type="text" id="title" name="title" required placeholder="Enter the title..."/>
                 <input className="mr-2 "type="text" id="tags" name="tags" required  placeholder="Enter the tags..."/>
@@ -86,7 +90,7 @@ const LandingPage = () => {
                     <div className="font-bold flex justify-between">{listing.title} 
                     <div className="flex gap-5">
                         <button className="hover:text-amber-200 cursor-pointer">Edit</button>
-                        <button className="hover:text-red-400 cursor-pointer" >Delete</button>
+                        <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
                     </div>
                     </div>
                     <div className="text-sm">

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const useDeleteListing = () => {
     return useMutation({mutationFn: async (id: string) => {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/listings/all/${id}`);
+        const response = await axios.delete(`https://689d89abce755fe69788ea77.mockapi.io/users/${id}`);
         return response.data
     },
     onSuccess: () => {
