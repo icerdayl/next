@@ -20,12 +20,16 @@ type Listing = {
     description: string
 }
 
-const LandingPage = () => {
+export const LandingPage = () => {
     const {data: listings, isLoading, isError, error} = useGetListing()
     const {mutate: postList} = usePostListing()
     const {mutate: deleteList} = useDeleteListing()
     const {mutate: updateList} = useUpdateListing()
     const [editList, seteditList] = useState<Listing | null>(null)
+
+    const editClick = (listing: Listing) => {
+        seteditList(listing)
+    }
 
     const handleUpdate = (formValue: FormData) => {
         if (!editList) return;
@@ -42,35 +46,36 @@ const LandingPage = () => {
         seteditList(null);
     }
 
-    const editClick = (listing: Listing) => {
-        seteditList(listing)
-    }
-
     const updatePost = (listing:Listing) => {
         return(
-            <div className="fixed w-full h-full bg-white">
-                <div className="blur-2xl">
-                    <div className="font-extrabold">
-                        <h1 className="font-extrabold">Hello</h1>
-                        <form action={handleUpdate}>
-                            <input type="text" defaultValue={listing.title} name="titleUp"/>
-                            <input type="text" defaultValue={listing.tags} name="tagsUp"/>
-                            <input type="text" defaultValue={listing.company} name="companyUp"/>
-                            <input type="text" defaultValue={listing.email} name="emailUp"/>
-                            <input type="text" defaultValue={listing.website} name="websiteUp"/>
-                            <input type="text" defaultValue={listing.location} name="locationUp"/>
-                            <input type="text" defaultValue={listing.description} name="descriptionUp"/>
-                            <div>
-                                <button type="submit">SUMBIT</button>
-                                <button type="button" onClick={() => seteditList(null)}> CANCEL</button>
+            <div className="fixed flex inset-0 z-50 items-center justify-center backdrop-blur-xl bg-[rgb(0,0,0,0.7)]">
+                <div className="w-150">
+                    <div className=" bg-white text-black rounded-3xl flex flex-col">
+                        <h1 className=" font-bold text-center font-sans text-xl ">Edit List</h1>
+                        <form action={handleUpdate} className=" flex flex-col gap-1 ml-4">
+                            <h3 className="font-bold">Title</h3>                             
+                            <input type="text" defaultValue={listing.title} name="titleUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Tags</h3>
+                            <input type="text" defaultValue={listing.tags} name="tagsUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Company</h3>
+                            <input type="text" defaultValue={listing.company} name="companyUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Email</h3>
+                            <input type="text" defaultValue={listing.email} name="emailUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Website</h3>
+                            <input type="text" defaultValue={listing.website} name="websiteUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Location</h3>
+                            <input type="text" defaultValue={listing.location} name="locationUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <h3 className="font-bold">Description</h3>                                             
+                            <input type="text" defaultValue={listing.description} name="descriptionUp" className="bg-gray-300 py-2 w-140 rounded-2xl pl-2  focus:bg-amber-200"/>
+                            <div className="flex gap-4 my-3">
+                                <button type="submit" className="bg-gray-300 py-2 px-4 rounded-xl hover:bg-amber-600 hover:text-black transition duration-500 ease-in font-bold cursor-pointer">SUMBIT</button>
+                                <button type="button" onClick={() => seteditList(null)} className="bg-gray-300 py-2 px-4 rounded-xl hover:bg-red-400 hover:text-black transition duration-500 ease-in font-bold cursor-pointer"> CANCEL</button>
                             </div>
                         </form>
                     </div>
-                    
                 </div>
             </div>
         )
-        console.log("CLICKED")
     }
 
     const deletePost = (id: string) => {
@@ -79,14 +84,17 @@ const LandingPage = () => {
 
     const addPost = (formData: FormData) => {
         postList({
-            title: formData.get('title'),
-            tags: formData.get('tags'),
-            company: formData.get('company'),
-            email: formData.get('email'),
-            website: formData.get('website'),
-            location: formData.get('location'),
-            description: formData.get('description')
+            title: String(formData.get('title')),
+            tags: String(formData.get('tags')),
+            company: String(formData.get('company')),
+            email:String( formData.get('email')),
+            website: String(formData.get('website')),
+            location: String(formData.get('location')),
+            description: String(formData.get('description'))
+
         })
+        console.log(postList)
+
 
     }
 
@@ -131,27 +139,26 @@ const LandingPage = () => {
             </form>
             
             <ul className="space-y-4 p-4">
-                {(listings ?? []).map((listing: Listing) => (
-                    
-                <li
-                    key={listing.id}
-                    className="flex-col p-4 bg-white shadow-md rounded-lg text-gray-700 hover:text-white hover:bg-gray-700 duration-500 ease-in  "
-                >
-                    <div className="font-bold flex justify-between">{listing.title} 
-                    <div className="flex gap-5">
-                        <button className="hover:text-amber-200 cursor-pointer" onClick={() => editClick(listing)}>Edit</button>
-                        <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
-                    </div>
-                    </div>
-                    <div className="text-sm">
-                    <div>{listing.tags}</div>
-                    <div>{listing.email}</div>
-                    <div>{listing.company}</div>
-                    <div>Email: {listing.website}</div>
-                    <div>Location: {listing.location}</div>
-                    <div>Job Description: {listing.description}</div>
-                    </div>
-                </li>
+                {(listings ?? []).map((listing: Listing) => (  
+                    <li
+                        key={listing.id}
+                        className="flex-col p-4 bg-white shadow-md rounded-lg text-gray-700 hover:text-white hover:bg-gray-700 duration-500 ease-in  "
+                    >
+                        <div className="font-bold flex justify-between">{listing.title} 
+                        <div className="flex gap-5">
+                            <button className="hover:text-amber-200 cursor-pointer" onClick={() => editClick(listing)}>Edit</button>
+                            <button className="hover:text-red-400 cursor-pointer" onClick={() => deletePost(listing.id.toString())}>Delete</button>
+                        </div>
+                        </div>
+                        <div className="text-sm">
+                        <div>{listing.tags}</div>
+                        <div>{listing.email}</div>
+                        <div>{listing.company}</div>
+                        <div>Email: {listing.website}</div>
+                        <div>Location: {listing.location}</div>
+                        <div>Job Description: {listing.description}</div>
+                        </div>
+                    </li>
                 
                 ))}
             </ul>

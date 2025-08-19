@@ -1,11 +1,13 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { axiosApi } from "@/app/lib/axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 export const useUpdateListing = () => {
+    const queryClient=useQueryClient()
     return useMutation({mutationFn: async (updatedList: any) => {
-        const response = await axios.put(`https://689d89abce755fe69788ea77.mockapi.io/users/${updatedList.id}`, updatedList);
-        return response.data
+        const response = axiosApi.put(`/listings/${updatedList.id}`, updatedList);
+        return response
     },
     onSuccess: () => {
-        return  useQuery({queryKey: ["listings"]})}
+        return  queryClient.invalidateQueries({queryKey: ["listings"]})}
     })}
